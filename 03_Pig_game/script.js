@@ -19,10 +19,10 @@ const buttonHold = document.querySelector(".btn--hold");
 
 // Starting conditions
 
-let scores
-let currentScore
-let activePlayer
-let playing
+let scores;
+let currentScore;
+let activePlayer;
+let playing;
 
 const init = function () {
     score0El.textContent = 0;
@@ -81,7 +81,11 @@ buttonHold.addEventListener("click", function () {
         scores[activePlayer] += currentScore;
         document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer];
     }
+    
     // 2. Check if player's score is >= 100;
+    // if true - stop the game and disable buttons
+    // if false - switch players
+
     if (scores[activePlayer] >= 20) {
         playing = false;
         document.querySelector(`.player--${activePlayer}`).classList.add("player--winner");
