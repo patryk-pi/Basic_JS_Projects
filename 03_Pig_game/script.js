@@ -81,7 +81,7 @@ buttonHold.addEventListener("click", function () {
         scores[activePlayer] += currentScore;
         document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer];
     }
-    
+
     // 2. Check if player's score is >= 100;
     // if true - stop the game and disable buttons
     // if false - switch players
