@@ -86,7 +86,7 @@ buttonHold.addEventListener("click", function () {
     // if true - stop the game and disable buttons
     // if false - switch players
 
-    if (scores[activePlayer] >= 20) {
+    if (scores[activePlayer] >= 100) {
         playing = false;
         document.querySelector(`.player--${activePlayer}`).classList.add("player--winner");
         document.querySelector(`.player--${activePlayer}`).classList.remove("player--active");
