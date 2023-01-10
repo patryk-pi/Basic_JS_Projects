@@ -47,6 +47,7 @@ const labelTimer = document.querySelector('.timer');
 const containerApp = document.querySelector('.app');
 const containerMovements = document.querySelector('.movements');
 
+const loginForm = document.querySelector(".login")
 const btnLogin = document.querySelector('.login__btn');
 const btnTransfer = document.querySelector('.form__btn--transfer');
 const btnLoan = document.querySelector('.form__btn--loan');
@@ -82,26 +83,23 @@ const calcDisplayBalance = function (movements) {
     labelBalance.textContent = `${balance}€`
 };
 
-calcDisplayBalance(account1.movements)
 
-displayMovements(account1.movements);
 
-const calcDisplaySummary = function (movements) {
-    const incomes = movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov);
+const calcDisplaySummary = function (account) {
+    const incomes = account.movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov);
     labelSumIn.textContent = `${incomes}€`
 
-    const out = movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov);
+    const out = account.movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov);
     labelSumOut.textContent = `${Math.abs(out)}€`;
 
-    const interest  = movements
+    const interest  = account.movements
         .filter(mov => mov > 0)
-        .map(deposit => deposit *1.2/100)
+        .map(deposit => deposit * account.interestRate/100)
         .filter((int, i, arr) => int > 1)
         .reduce((acc, int) => acc + int);
     labelSumInterest.textContent = `${interest}`;
 }
 
-calcDisplaySummary(account1.movements);
 
 const createUsernames = function (accs) {
     accs.forEach(function (acc) {
@@ -115,5 +113,29 @@ const createUsernames = function (accs) {
 };
 
 createUsernames(accounts);
+
+// Even handler
+
+let currentAccount;
+
+loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
+
+    if (currentAccount?.pin === Number(inputLoginPin.value)) {
+        labelWelcome.textContent = `Welcome back, ${currentAccount.owner.split(' ')[0]}`;
+        containerApp.style.opacity = '100';
+        inputLoginUsername.value = inputLoginPin.value = '';
+        inputLoginPin.blur();
+        displayMovements(currentAccount.movements);
+        calcDisplayBalance(currentAccount.movements);
+        calcDisplaySummary(currentAccount);
+    }
+
+
+
+
+})
 
 
