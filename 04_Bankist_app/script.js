@@ -47,7 +47,8 @@ const labelTimer = document.querySelector('.timer');
 const containerApp = document.querySelector('.app');
 const containerMovements = document.querySelector('.movements');
 
-const loginForm = document.querySelector(".login")
+const loginForm = document.querySelector(".login");
+const transferForm = document.querySelector('.form--transfer');
 const btnLogin = document.querySelector('.login__btn');
 const btnTransfer = document.querySelector('.form__btn--transfer');
 const btnLoan = document.querySelector('.form__btn--loan');
@@ -76,11 +77,11 @@ const displayMovements = function (movements) {
     });
 };
 
-const calcDisplayBalance = function (movements) {
-    const balance = movements.reduce(function (acc, mov) {
+const calcDisplayBalance = function (account) {
+    account.balance = account.movements.reduce(function (acc, mov) {
         return acc + mov;
     }, 0);
-    labelBalance.textContent = `${balance}€`
+    labelBalance.textContent = `${account.balance}€`
 };
 
 
@@ -114,6 +115,12 @@ const createUsernames = function (accs) {
 
 createUsernames(accounts);
 
+const updateUI = acc => {
+    displayMovements(acc.movements);
+    calcDisplayBalance(acc);
+    calcDisplaySummary(acc);
+}
+
 // Even handler
 
 let currentAccount;
@@ -128,13 +135,23 @@ loginForm.addEventListener('submit', e => {
         containerApp.style.opacity = '100';
         inputLoginUsername.value = inputLoginPin.value = '';
         inputLoginPin.blur();
-        displayMovements(currentAccount.movements);
-        calcDisplayBalance(currentAccount.movements);
-        calcDisplaySummary(currentAccount);
+        updateUI(currentAccount)
+    }
+});
+
+transferForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const amount = Number(inputTransferAmount.value);
+    const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value);
+
+    if (amount > 0 && receiverAcc && currentAccount.balance >= amount && receiverAcc?.username !== currentAccount) {
+        currentAccount.movements.push(-amount);
+        receiverAcc.movements.push(amount);
+        updateUI(currentAccount);
     }
 
-
-
+    inputTransferAmount.value = inputTransferTo.value = '';
 
 })
 
