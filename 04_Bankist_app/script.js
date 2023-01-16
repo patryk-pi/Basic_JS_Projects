@@ -78,22 +78,24 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 // FUNCTIONS
 
-const formatMovement = date => {
+const formatMovement = (date, locale) => {
 
     const calcDaysPassed = (date1, date2) => Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
 
     const daysPassed = calcDaysPassed(new Date(), date);
 
-    if (daysPassed === 0) return 'Today'
-    if (daysPassed === 1) return 'Yesterday'
+    if (daysPassed === 0) return 'Today';
+    if (daysPassed === 1) return 'Yesterday';
     if (daysPassed <= 7) return `${daysPast} days ago`;
 
-    const day = `${date.getDate()}`.padStart(2, 0);
+ /*   const day = `${date.getDate()}`.padStart(2, 0);
     const month = `${date.getMonth() + 1}`.padStart(2, 0);
     const year = date.getFullYear();
 
 
-    return `${day}/${month}/${year}`;
+    return `${day}/${month}/${year}`;*/
+
+    return new Intl.DateTimeFormat(locale).format(date);
 
 
 }
@@ -107,7 +109,7 @@ const displayMovements = function (acc, sort = false) {
         const type = mov > 0 ? "deposit" : "withdrawal";
 
         const date = new Date(acc.movementsDates[i]);
-        const displayDate = formatMovement(date);
+        const displayDate = formatMovement(date, acc.locale);
 
 
         const html = `<div class="movements__row">
@@ -186,13 +188,20 @@ loginForm.addEventListener('submit', e => {
         containerApp.style.opacity = '100';
 
         const now = new Date();
-        const date = `${now.getDate()}`.padStart(2, 0);
+        const options = {
+            hour: 'numeric',
+            minute: 'numeric',
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+        }
+   /*     const date = `${now.getDate()}`.padStart(2, 0);
         const month = `${now.getMonth() + 1}`.padStart(2, 0);
         const year = now.getFullYear();
         const hours = `${now.getHours()}`.padStart(2, 0);
-        const minutes = `${now.getMinutes()}`.padStart(2, 0);
+        const minutes = `${now.getMinutes()}`.padStart(2, 0);*/
 
-        labelDate.textContent = `${date}/${month}/${year}, ${hours}:${minutes}`;
+        labelDate.textContent = new Intl.DateTimeFormat(currentAccount.locale, options).format(now);
         inputLoginUsername.value = inputLoginPin.value = '';
         inputLoginPin.blur();
         updateUI(currentAccount)
