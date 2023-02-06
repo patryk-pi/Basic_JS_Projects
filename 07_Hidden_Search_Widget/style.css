@@ -14,11 +14,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    outline-color: #7d5fff;
 }
 
 .search {
     position: relative;
     height: 50px;
+    outline-color: #7d5fff;
+
 }
 
 .search .input {
@@ -28,8 +31,9 @@ body {
     padding: 15px;
     height: 50px;
     width: 50px;
-
+    outline-color: #7d5fff;
     transition: width .3s ease;
+
 }
 
 .btn {
@@ -38,16 +42,18 @@ body {
     cursor: pointer;
     font-size: 24px;
     position: absolute;
-    top: 0;
+    top: 2px;
     left: 7px;
-    height: 50px;
+    height: 45px;
     transition: transform .3s ease;
+    outline-color: #7d5fff;
 }
 
 .search.active .input {
-    width: 200px;
+    width: 250px;
 }
 
 .search.active .btn {
-    transform: translateX(198px);
+    transform: translateX(200px);
+
 }
